@@ -5,7 +5,8 @@ import {
   ADDON_ID,
   PANEL_ID,
   VALUES_CHANGED_EVENT_ID,
-  ERRORS_CHANGED_EVENT_ID
+  ERRORS_CHANGED_EVENT_ID,
+  VALUES_SET_EVENT_ID
 } from "./constants";
 
 export default makeDecorator({
@@ -16,6 +17,10 @@ export default makeDecorator({
   wrapper: (getStory, context, { options, parameters }) => {
     const formikParams = Object.assign({}, options || {}, context.formikProps);
     const channel = addons.getChannel();
+
+    channel.on(VALUES_SET_EVENT_ID, function(val) {
+      context.formikBag.setFieldValue(val.name, val.new_value);
+    });
 
     return (
       <Formik

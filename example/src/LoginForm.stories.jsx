@@ -20,4 +20,5 @@ storiesOf("<LoginForm>")
       initialValues: { email: "", password: "" }
     })
   )
-  .add("default", ({ formikBag }) => <LoginForm {...formikBag} />);
+  .add("default", ({ formikBag }) => <LoginForm {...formikBag} />)
+  .add("other", ({ formikBag }) => <LoginForm {...formikBag} />);

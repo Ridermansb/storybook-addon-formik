@@ -1,9 +1,11 @@
 import React, { PureComponent } from "react";
+import JsonView from 'react-json-view';
 import {
   ADDON_ID,
   PANEL_ID,
   VALUES_CHANGED_EVENT_ID,
-  ERRORS_CHANGED_EVENT_ID
+  ERRORS_CHANGED_EVENT_ID,
+  VALUES_SET_EVENT_ID
 } from "./constants";
 
 export default class extends PureComponent {
@@ -31,8 +33,13 @@ export default class extends PureComponent {
     channel.removeListener(ERRORS_CHANGED_EVENT_ID, this._onErrorsChanged);
   }
 
+  handleEdit = val => {
+    const { channel } = this.props;
+    channel.emit(VALUES_SET_EVENT_ID, val);
+  }
+
   render() {
-    const { values, errors, formikReady } = this.state;
+    const { values, errors } = this.state;
 
     return (
       <div
@@ -43,13 +50,11 @@ export default class extends PureComponent {
         }}
       >
         <div style={{ width: "50%" }}>
-          <strong>Values</strong>
-          <pre>{JSON.stringify(values, 2, 2)}</pre>
+          <JsonView src={values} name="Values" onEdit={this.handleEdit} />
         </div>
 
         <div style={{ width: "50%" }}>
-          <strong>Errors</strong>
-          <pre>{JSON.stringify(errors, 2, 2)}</pre>
+          <JsonView src={errors} name="Errors" />
         </div>
       </div>
     );
